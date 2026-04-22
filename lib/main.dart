@@ -13,7 +13,7 @@ void main() {
     systemNavigationBarContrastEnforced: false,
     statusBarIconBrightness: Brightness.light,
     systemNavigationBarDividerColor: Colors.transparent,
-    systemNavigationBarIconBrightness: Brightness.light,
+    systemNavigationBarIconBrightness: Brightness.dark,
   ));
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -125,7 +125,7 @@ const reservedBooking = BookingItem(
   utsNumber: '95XWEBR09F',
   ticketTypeLabel: 'Season Ticket',
   ticketCategory: 'MONTHLY | FIRST | ₹570.00',
-  bookedOn: '14 Apr 2026, 05:09',
+  bookedOn: '16 Apr 2026, 05:09',
   showPnr: false,
 );
 
@@ -329,24 +329,24 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      bottomNavigationBar: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          Container(
-            height: 28 + MediaQuery.of(context).padding.bottom,
-            width: double.infinity,
-            color: AppColors.blue,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarIconBrightness: Brightness.dark,
+        statusBarIconBrightness: Brightness.light,
+        statusBarColor: Colors.transparent,
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        bottomNavigationBar: Container(
+          height: 74 + MediaQuery.of(context).padding.bottom,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+            border: Border.all(color: const Color(0xFFE0E0E0)),
           ),
-          Container(
-            height: 74,
-            margin: EdgeInsets.only(bottom: 28 + MediaQuery.of(context).padding.bottom),
-            decoration: BoxDecoration(
-              color: AppColors.navBg,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
-              border: Border.all(color: AppColors.navBorder),
-            ),
+          child: Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
             child: Row(
               children: [
                 _BottomTab(
@@ -372,99 +372,99 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
               ],
             ),
           ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top + 10,
-              left: 12,
-              right: 12,
-              bottom: 16,
-            ),
-            color: AppColors.blue,
-            child: Row(
-              children: [
-                _roundIconButton(
-                  icon: Icons.arrow_back,
-                  onTap: () => Navigator.pop(context),
-                ),
-                const SizedBox(width: 12),
-                const Expanded(
-                  child: Text(
-                    'My Bookings',
-                    style: TextStyle(
-                      fontSize: 21,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
+        ),
+        body: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(
+                top: MediaQuery.of(context).padding.top + 10,
+                left: 12,
+                right: 12,
+                bottom: 16,
+              ),
+              color: AppColors.blue,
+              child: Row(
+                children: [
+                  _roundIconButton(
+                    icon: Icons.arrow_back,
+                    onTap: () => Navigator.pop(context),
+                  ),
+                  const SizedBox(width: 12),
+                  const Expanded(
+                    child: Text(
+                      'My Bookings',
+                      style: TextStyle(
+                        fontSize: 21,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
-                ),
-                _roundIconButton(
-                  icon: Icons.filter_list_alt,
-                  onTap: () {},
-                  showBorder: false,
-                  iconSize: 24,
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(14, 8, 14, 16),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Spacer(flex: 2),
-                      const Text(
-                        'Upcoming (2)',
-                        style: TextStyle(
-                          color: AppColors.orange,
-                          fontSize: 15.5,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const Spacer(),
-                      const Icon(
-                        Icons.sync,
-                        size: 20,
-                        color: AppColors.mutedText,
-                      ),
-                      const SizedBox(width: 4),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  BookingTicketCard(
-                    item: reservedBooking,
-                    onViewDetails: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => BookingDetailsScreen(item: reservedBooking),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 14),
-                  BookingTicketCard(
-                    item: unreservedBooking,
-                    onViewDetails: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => BookingDetailsScreen(item: unreservedBooking),
-                        ),
-                      );
-                    },
+                  _roundIconButton(
+                    icon: Icons.filter_list_alt,
+                    onTap: () {},
+                    showBorder: false,
+                    iconSize: 24,
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(14, 8, 14, 16),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Spacer(flex: 2),
+                        const Text(
+                          'Upcoming (2)',
+                          style: TextStyle(
+                            color: AppColors.orange,
+                            fontSize: 15.5,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const Spacer(),
+                        const Icon(
+                          Icons.sync,
+                          size: 20,
+                          color: AppColors.mutedText,
+                        ),
+                        const SizedBox(width: 4),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    BookingTicketCard(
+                      item: reservedBooking,
+                      onViewDetails: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => BookingDetailsScreen(item: reservedBooking),
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 14),
+                    BookingTicketCard(
+                      item: unreservedBooking,
+                      onViewDetails: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => BookingDetailsScreen(item: unreservedBooking),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -842,41 +842,48 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
     final expired = _remainingSeconds == 0;
     final progress = expired ? 1.0 : (300 - _remainingSeconds) / 300.0;
 
-    return Scaffold(
-      backgroundColor: AppColors.lightGrey,
-      bottomNavigationBar: Container(
-        height: 28 + MediaQuery.of(context).padding.bottom,
-        width: double.infinity,
-        color: AppColors.blue,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarIconBrightness: Brightness.dark,
+        statusBarIconBrightness: Brightness.light,
+        statusBarColor: Colors.transparent,
       ),
-      body: Column(
-        children: [
-          Container(
-            color: AppColors.blue,
-            padding: EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top + 10,
-              left: 12,
-              right: 12,
-              bottom: 16,
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _roundIconButton(
-                  icon: Icons.arrow_back,
-                  onTap: () => Navigator.pop(context),
-                ),
-                const SizedBox(width: 12),
-                const Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Booking Details',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600,
+      child: Scaffold(
+        backgroundColor: AppColors.lightGrey,
+        bottomNavigationBar: Container(
+          height: MediaQuery.of(context).padding.bottom,
+          width: double.infinity,
+          color: Colors.white,
+        ),
+        body: Column(
+          children: [
+            Container(
+              color: AppColors.blue,
+              padding: EdgeInsets.only(
+                top: MediaQuery.of(context).padding.top + 10,
+                left: 12,
+                right: 12,
+                bottom: 16,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _roundIconButton(
+                    icon: Icons.arrow_back,
+                    onTap: () => Navigator.pop(context),
+                  ),
+                  const SizedBox(width: 12),
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Booking Details',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w600,
                         ),
                       ),
                       SizedBox(height: 2),
@@ -999,7 +1006,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                         ),
                         const SizedBox(height: 14),
                         const _QrAndInfoSection(),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 20),
                       ],
                     ),
                   ),
@@ -1009,8 +1016,9 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 }
 
 class _QrAndInfoSection extends StatelessWidget {
