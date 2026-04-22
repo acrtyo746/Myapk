@@ -731,6 +731,22 @@ class _BottomTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = selected ? AppColors.orange : const Color(0xFF8DA2AF);
 
+    String asset;
+    switch (label) {
+      case 'Upcoming':
+        asset = 'assets/select_upcoming_ticket.png';
+        break;
+      case 'Completed':
+        asset = 'assets/select_completed_ticket.png';
+        break;
+      case 'Cancelled':
+        asset = 'assets/selected_cancelled_ticket.png';
+        break;
+      case 'All':
+      default:
+        asset = 'assets/select_all_ticket.png';
+    }
+
     return Expanded(
       child: GestureDetector(
         onTap: onTap,
@@ -746,10 +762,11 @@ class _BottomTab extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.confirmation_number_outlined,
+              Image.asset(
+                asset,
+                width: 22,
+                height: 22,
                 color: color,
-                size: 21,
               ),
               const SizedBox(height: 2),
               Text(

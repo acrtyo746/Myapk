@@ -70,6 +70,10 @@ flutter:
     - assets/custom_qr.png
     - assets/railone.png
     - assets/my_rail_login.png
+    - assets/select_all_ticket.png
+    - assets/select_upcoming_ticket.png
+    - assets/select_completed_ticket.png
+    - assets/selected_cancelled_ticket.png
 
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
