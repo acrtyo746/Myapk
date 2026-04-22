@@ -420,7 +420,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                     children: [
                       const Spacer(flex: 2),
                       const Text(
-                        'Upcoming (1)',
+                        'Upcoming (2)',
                         style: TextStyle(
                           color: AppColors.orange,
                           fontSize: 15.5,
@@ -507,7 +507,7 @@ class BookingTicketCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFFF5F5F5),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFF1E1CB), width: 1.4),
+        border: Border.all(color: const Color(0xFFF1E1CB), width: 1.8),
       ),
       child: Column(
         children: [
@@ -650,10 +650,9 @@ class BookingTicketCard extends StatelessWidget {
                   child: Container(
                     width: 30,
                     height: 30,
-                    decoration: BoxDecoration(
-                      color: AppColors.lightGrey,
+                    decoration: const BoxDecoration(
+                      color: Colors.transparent,
                       shape: BoxShape.circle,
-                      border: Border.all(color: const Color(0xFFF1E1CB), width: 1.1),
                     ),
                   ),
                 ),
@@ -662,7 +661,7 @@ class BookingTicketCard extends StatelessWidget {
                   child: Container(
                     width: 18,
                     height: 32,
-                    color: AppColors.lightGrey,
+                    color: Colors.transparent,
                   ),
                 ),
                 Positioned(
@@ -670,10 +669,9 @@ class BookingTicketCard extends StatelessWidget {
                   child: Container(
                     width: 30,
                     height: 30,
-                    decoration: BoxDecoration(
-                      color: AppColors.lightGrey,
+                    decoration: const BoxDecoration(
+                      color: Colors.transparent,
                       shape: BoxShape.circle,
-                      border: Border.all(color: const Color(0xFFF1E1CB), width: 1.1),
                     ),
                   ),
                 ),
@@ -682,7 +680,7 @@ class BookingTicketCard extends StatelessWidget {
                   child: Container(
                     width: 18,
                     height: 32,
-                    color: AppColors.lightGrey,
+                    color: Colors.transparent,
                   ),
                 ),
                 const Padding(
@@ -1288,7 +1286,7 @@ class TicketDetailsCard extends StatelessWidget {
                               width: 35,
                               height: 35,
                               decoration: const BoxDecoration(
-                                color: AppColors.lightGrey,
+                                color: Colors.transparent,
                                 shape: BoxShape.circle,
                               ),
                             ),
@@ -1298,7 +1296,7 @@ class TicketDetailsCard extends StatelessWidget {
                             child: Container(
                               width: 18,
                               height: 37,
-                              color: AppColors.lightGrey,
+                              color: Colors.transparent,
                             ),
                           ),
                           Positioned(
@@ -1307,7 +1305,7 @@ class TicketDetailsCard extends StatelessWidget {
                               width: 35,
                               height: 35,
                               decoration: const BoxDecoration(
-                                color: AppColors.lightGrey,
+                                color: Colors.transparent,
                                 shape: BoxShape.circle,
                               ),
                             ),
@@ -1317,7 +1315,7 @@ class TicketDetailsCard extends StatelessWidget {
                             child: Container(
                               width: 18,
                               height: 37,
-                              color: AppColors.lightGrey,
+                              color: Colors.transparent,
                             ),
                           ),
                           const Positioned.fill(
