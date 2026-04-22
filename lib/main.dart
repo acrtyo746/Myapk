@@ -503,240 +503,214 @@ class BookingTicketCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const double notchPosition = 140.0;
+    const double notchRadius = 15.0;
+
+    final shape = TicketShapeBorder(
+      side: const BorderSide(color: Color(0xFFE3A655), width: 1.6),
+      notchRadius: notchRadius,
+      notchPosition: notchPosition,
+      borderRadius: 14,
+    );
+
     return Container(
-      decoration: BoxDecoration(
+      decoration: ShapeDecoration(
         color: const Color(0xFFF5F5F5),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFF1E1CB), width: 1.8),
+        shape: shape,
       ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4.5),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF2E7F5),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Text(
-                        'Unreserved',
-                        style: TextStyle(
-                          color: Color(0xFFAC48BD),
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
+      child: ClipPath(
+        clipper: ShapeBorderClipper(shape: shape),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4.5),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF2E7F5),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Text(
+                          'Unreserved',
+                          style: TextStyle(
+                            color: Color(0xFFAC48BD),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
-                    ),
-                    const Spacer(),
-                    const Text(
-                      'UTS: ',
-                      style: TextStyle(
-                        color: AppColors.mutedText,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      item.utsNumber,
-                      style: const TextStyle(
-                        color: AppColors.textBlack,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                const Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'Ticket Type',
+                      const Spacer(),
+                      const Text(
+                        'UTS: ',
                         style: TextStyle(
+                          color: AppColors.mutedText,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        item.utsNumber,
+                        style: const TextStyle(
+                          color: AppColors.textBlack,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  const Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Ticket Type',
+                          style: TextStyle(
+                            color: Color(0xFFBCBCBC),
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Booking Date',
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                            color: Color(0xFFBCBCBC),
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      const Expanded(
+                        child: Text(
+                          'MONTHLY',
+                          style: TextStyle(
+                            color: AppColors.titleBlack,
+                            fontSize: 14.5,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          item.bookedOn.split(',')[0],
+                          textAlign: TextAlign.right,
+                          style: const TextStyle(
+                            color: AppColors.titleBlack,
+                            fontSize: 14.5,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          item.fromStation,
+                          style: const TextStyle(
+                            color: AppColors.titleBlack,
+                            fontSize: 14.5,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        '— ${item.distance} —',
+                        style: const TextStyle(
                           color: Color(0xFFBCBCBC),
-                          fontSize: 12,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        'Booking Date',
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          color: Color(0xFFBCBCBC),
-                          fontSize: 12,
+                      Expanded(
+                        child: Text(
+                          item.toStation,
+                          textAlign: TextAlign.right,
+                          style: const TextStyle(
+                            color: AppColors.titleBlack,
+                            fontSize: 14.5,
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    const Expanded(
-                      child: Text(
-                        'MONTHLY',
-                        style: TextStyle(
-                          color: AppColors.titleBlack,
-                          fontSize: 14.5,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        item.bookedOn.split(',')[0],
-                        textAlign: TextAlign.right,
-                        style: const TextStyle(
-                          color: AppColors.titleBlack,
-                          fontSize: 14.5,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        item.fromStation,
-                        style: const TextStyle(
-                          color: AppColors.titleBlack,
-                          fontSize: 14.5,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      '— ${item.distance} —',
-                      style: const TextStyle(
-                        color: Color(0xFFBCBCBC),
-                        fontSize: 11,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        item.toStation,
-                        textAlign: TextAlign.right,
-                        style: const TextStyle(
-                          color: AppColors.titleBlack,
-                          fontSize: 14.5,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-          SizedBox(
-            height: 32,
-            child: Stack(
-              clipBehavior: Clip.none,
-              alignment: Alignment.center,
-              children: [
-                Positioned(
-                  left: -15,
-                  child: Container(
-                    width: 30,
-                    height: 30,
-                    decoration: const BoxDecoration(
-                      color: Colors.transparent,
-                      shape: BoxShape.circle,
+            const SizedBox(
+              height: 32,
+              child: Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: DashedLine(
+                      color: Color(0xFFD9D9D9),
+                      dashWidth: 3,
+                      spacing: 3,
                     ),
                   ),
-                ),
-                Positioned(
-                  left: -18,
-                  child: Container(
-                    width: 18,
-                    height: 32,
-                    color: Colors.transparent,
-                  ),
-                ),
-                Positioned(
-                  right: -15,
-                  child: Container(
-                    width: 30,
-                    height: 30,
-                    decoration: const BoxDecoration(
-                      color: Colors.transparent,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  right: -18,
-                  child: Container(
-                    width: 18,
-                    height: 32,
-                    color: Colors.transparent,
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: DashedLine(
-                    color: Color(0xFFE8E8E8),
-                    dashWidth: 3,
-                    spacing: 3,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          SizedBox(
-            height: 52,
-            child: Row(
-              children: [
-                Expanded(
-                  child: InkWell(
-                    onTap: () {},
-                    child: const Center(
-                      child: Text(
-                        'Book Again',
-                        style: TextStyle(
-                          color: AppColors.blue,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16,
+            SizedBox(
+              height: 52,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {},
+                      child: const Center(
+                        child: Text(
+                          'Book Again',
+                          style: TextStyle(
+                            color: AppColors.blue,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                Container(
-                  width: 0.8,
-                  height: 20,
-                  color: const Color(0xFFD0D0D0),
-                ),
-                Expanded(
-                  child: InkWell(
-                    onTap: onViewDetails,
-                    child: const Center(
-                      child: Text(
-                        'View Details',
-                        style: TextStyle(
-                          color: AppColors.blue,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16,
+                  Container(
+                    width: 0.8,
+                    height: 20,
+                    color: const Color(0xFFD0D0D0),
+                  ),
+                  Expanded(
+                    child: InkWell(
+                      onTap: onViewDetails,
+                      child: const Center(
+                        child: Text(
+                          'View Details',
+                          style: TextStyle(
+                            color: AppColors.blue,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -1129,12 +1103,21 @@ class TicketDetailsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const double notchPosition = 435.0;
+    const double notchRadius = 18.5;
+
+    final shape = TicketShapeBorder(
+      notchRadius: notchRadius,
+      notchPosition: notchPosition,
+      borderRadius: 18,
+    );
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 2),
-      decoration: BoxDecoration(
+      decoration: ShapeDecoration(
         color: const Color(0xFFFFFDFD),
-        borderRadius: BorderRadius.circular(18),
-        boxShadow: [
+        shape: shape,
+        shadows: [
           BoxShadow(
             color: Colors.black.withValues(alpha: .08),
             blurRadius: 18,
@@ -1142,268 +1125,227 @@ class TicketDetailsCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _TicketTopPreview(
-                item: item,
-                expired: expired,
-                formattedTime: formattedTime,
+      child: ClipPath(
+        clipper: ShapeBorderClipper(shape: shape),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _TicketTopPreview(
+              item: item,
+              expired: expired,
+              formattedTime: formattedTime,
+            ),
+            if (!expired)
+              LinearProgressIndicator(
+                value: progress,
+                backgroundColor: Colors.grey.shade300,
+                valueColor: const AlwaysStoppedAnimation<Color>(Color.fromRGBO(255, 59, 31, 1)),
               ),
-              if (!expired)
-                LinearProgressIndicator(
-                  value: progress,
-                  backgroundColor: Colors.grey.shade300,
-                  valueColor: AlwaysStoppedAnimation<Color>(const Color.fromRGBO(255, 59, 31, 1)),
-                ),
-              Container(
-                color: Colors.white,
-                padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            item.ticketTypeLabel,
-                            style: const TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.titleBlack,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          item.utsNumber,
+            Container(
+              color: Colors.white,
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          item.ticketTypeLabel,
                           style: const TextStyle(
                             fontSize: 17,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.textBlack,
-                            letterSpacing: 0.5,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.titleBlack,
                           ),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            item.fromStation,
-                            style: const TextStyle(
-                              fontSize: 16.5,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 2),
-                          child: Text(
-                            '— ${item.distance} —',
-                            style: const TextStyle(
-                              color: AppColors.mutedText,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Text(
-                            item.toStation,
-                            textAlign: TextAlign.right,
-                            style: const TextStyle(
-                              fontSize: 16.5,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: _DetailPair(
-                            label: 'Via',
-                            value: item.viaStation,
-                            alignEnd: false,
-                          ),
-                        ),
-                        Expanded(
-                          child: _DetailPair(
-                            label: 'Booked on',
-                            value: item.bookedOn.replaceAll(',', ''),
-                            alignEnd: true,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    const Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: _DetailPair(
-                            label: 'Valid From',
-                            value: '16/04/2026',
-                            alignEnd: false,
-                          ),
-                        ),
-                        Expanded(
-                          child: _DetailPair(
-                            label: '*Valid Till',
-                            value: '15/05/2026',
-                            alignEnd: true,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      item.ticketCategory,
-                      style: const TextStyle(
-                        fontSize: 14.8,
-                        color: AppColors.textBlack,
-                        fontWeight: FontWeight.w500,
                       ),
-                    ),
-                    const SizedBox(height: 14),
-                    SizedBox(
-                      height: 35,
-                      child: Stack(
-                        clipBehavior: Clip.none,
-                        alignment: Alignment.center,
-                        children: [
-                          Positioned(
-                            left: -17.5,
-                            child: Container(
-                              width: 35,
-                              height: 35,
-                              decoration: const BoxDecoration(
-                                color: Colors.transparent,
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            left: -18,
-                            child: Container(
-                              width: 18,
-                              height: 37,
-                              color: Colors.transparent,
-                            ),
-                          ),
-                          Positioned(
-                            right: -17.5,
-                            child: Container(
-                              width: 35,
-                              height: 35,
-                              decoration: const BoxDecoration(
-                                color: Colors.transparent,
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            right: -18,
-                            child: Container(
-                              width: 18,
-                              height: 37,
-                              color: Colors.transparent,
-                            ),
-                          ),
-                          const Positioned.fill(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 17.5),
-                              child: DashedLine(color: AppColors.dividerGrey),
-                            ),
-                          ),
-                        ],
+                      Text(
+                        item.utsNumber,
+                        style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.textBlack,
+                          letterSpacing: 0.5,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 14),
-                    const Row(
-                      children: [
-                        Expanded(
-                          child: _PersonDetail(
-                            label: 'Name',
-                            value: 'Ajay Amirka Chauhan',
-                            alignEnd: false,
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          item.fromStation,
+                          style: const TextStyle(
+                            fontSize: 16.5,
+                            fontWeight: FontWeight.w800,
                           ),
                         ),
-                        Expanded(
-                          child: _PersonDetail(
-                            label: 'Age',
-                            value: '20 years',
-                            alignEnd: true,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2),
+                        child: Text(
+                          '— ${item.distance} —',
+                          style: const TextStyle(
+                            color: AppColors.mutedText,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          item.toStation,
+                          textAlign: TextAlign.right,
+                          style: const TextStyle(
+                            fontSize: 16.5,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: _DetailPair(
+                          label: 'Via',
+                          value: item.viaStation,
+                          alignEnd: false,
+                        ),
+                      ),
+                      Expanded(
+                        child: _DetailPair(
+                          label: 'Booked on',
+                          value: item.bookedOn.replaceAll(',', ''),
+                          alignEnd: true,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  const Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: _DetailPair(
+                          label: 'Valid From',
+                          value: '16/04/2026',
+                          alignEnd: false,
+                        ),
+                      ),
+                      Expanded(
+                        child: _DetailPair(
+                          label: '*Valid Till',
+                          value: '15/05/2026',
+                          alignEnd: true,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    item.ticketCategory,
+                    style: const TextStyle(
+                      fontSize: 14.8,
+                      color: AppColors.textBlack,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  const SizedBox(
+                    height: 35,
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      alignment: Alignment.center,
+                      children: [
+                        Positioned.fill(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 17.5),
+                            child: DashedLine(color: AppColors.dividerGrey),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
-                    const Row(
-                      children: [
-                        Expanded(
-                          child: _PersonDetail(
-                            label: 'ID Type',
-                            value: 'PAN Card',
-                            alignEnd: false,
-                          ),
+                  ),
+                  const SizedBox(height: 14),
+                  const Row(
+                    children: [
+                      Expanded(
+                        child: _PersonDetail(
+                          label: 'Name',
+                          value: 'Ajay Amirka Chauhan',
+                          alignEnd: false,
                         ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                'ID Number',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: AppColors.mutedText,
-                                ),
-                              ),
-                              SizedBox(height: 6),
-                              Text(
-                                'DFCPC7842Q',
-                                style: TextStyle(
-                                  fontSize: 14.8,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.textBlack,
-                                  letterSpacing: 0.3,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      '*Valid for start of journey within 1 hour or until departure of the first train.',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: AppColors.mutedText,
-                        fontStyle: FontStyle.italic,
                       ),
+                      Expanded(
+                        child: _PersonDetail(
+                          label: 'Age',
+                          value: '20 years',
+                          alignEnd: true,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  const Row(
+                    children: [
+                      Expanded(
+                        child: _PersonDetail(
+                          label: 'ID Type',
+                          value: 'PAN Card',
+                          alignEnd: false,
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              'ID Number',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: AppColors.mutedText,
+                              ),
+                            ),
+                            SizedBox(height: 6),
+                            Text(
+                              'DFCPC7842Q',
+                              style: TextStyle(
+                                fontSize: 14.8,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.textBlack,
+                                letterSpacing: 0.3,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    '*Valid for start of journey within 1 hour or until departure of the first train.',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppColors.mutedText,
+                      fontStyle: FontStyle.italic,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Container(
-                height: 12,
-                decoration: const BoxDecoration(
-                  color: AppColors.ticketPink,
-                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(18)),
-                ),
+            ),
+            Container(
+              height: 12,
+              decoration: const BoxDecoration(
+                color: AppColors.ticketPink,
               ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1750,6 +1692,122 @@ class _PersonDetail extends StatelessWidget {
       ],
     );
   }
+}
+
+class TicketShapeBorder extends OutlinedBorder {
+  final double notchRadius;
+  final double notchPosition;
+  final double borderRadius;
+
+  const TicketShapeBorder({
+    super.side = BorderSide.none,
+    required this.notchRadius,
+    required this.notchPosition,
+    this.borderRadius = 14.0,
+  });
+
+  @override
+  Path getInnerPath(Rect rect, {TextDirection? textDirection}) {
+    return _ticketPath(rect, notchRadius, notchPosition, borderRadius, side.width);
+  }
+
+  @override
+  Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
+    return _ticketPath(rect, notchRadius, notchPosition, borderRadius, 0);
+  }
+
+  Path _ticketPath(Rect rect, double radius, double position, double bRadius, double inset) {
+    final innerRect = rect.deflate(inset);
+    final path = Path();
+    path.addRRect(RRect.fromRectAndRadius(innerRect, Radius.circular(bRadius)));
+
+    final leftNotch = Path()
+      ..addOval(Rect.fromCircle(
+        center: Offset(rect.left + inset, rect.top + position),
+        radius: radius,
+      ));
+
+    final rightNotch = Path()
+      ..addOval(Rect.fromCircle(
+        center: Offset(rect.right - inset, rect.top + position),
+        radius: radius,
+      ));
+
+    return Path.combine(
+      PathOperation.difference,
+      path,
+      Path.combine(PathOperation.union, leftNotch, rightNotch),
+    );
+  }
+
+  @override
+  void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {
+    if (side.style == BorderStyle.none) return;
+    final paint = side.toPaint();
+    canvas.drawPath(getOuterPath(rect, textDirection: textDirection), paint);
+  }
+
+  @override
+  ShapeBorder? lerpFrom(ShapeBorder? a, double t) {
+    if (a is TicketShapeBorder) {
+      return TicketShapeBorder(
+        side: BorderSide.lerp(a.side, side, t),
+        notchRadius: lerpDouble(a.notchRadius, notchRadius, t)!,
+        notchPosition: lerpDouble(a.notchPosition, notchPosition, t)!,
+        borderRadius: lerpDouble(a.borderRadius, borderRadius, t)!,
+      );
+    }
+    return super.lerpFrom(a, t);
+  }
+
+  @override
+  ShapeBorder? lerpTo(ShapeBorder? b, double t) {
+    if (b is TicketShapeBorder) {
+      return TicketShapeBorder(
+        side: BorderSide.lerp(side, b.side, t),
+        notchRadius: lerpDouble(notchRadius, b.notchRadius, t)!,
+        notchPosition: lerpDouble(notchPosition, b.notchPosition, t)!,
+        borderRadius: lerpDouble(borderRadius, b.borderRadius, t)!,
+      );
+    }
+    return super.lerpTo(b, t);
+  }
+
+  @override
+  ShapeBorder scale(double t) => TicketShapeBorder(
+        side: side.scale(t),
+        notchRadius: notchRadius * t,
+        notchPosition: notchPosition * t,
+        borderRadius: borderRadius * t,
+      );
+
+  @override
+  OutlinedBorder copyWith({
+    BorderSide? side,
+    double? notchRadius,
+    double? notchPosition,
+    double? borderRadius,
+  }) {
+    return TicketShapeBorder(
+      side: side ?? this.side,
+      notchRadius: notchRadius ?? this.notchRadius,
+      notchPosition: notchPosition ?? this.notchPosition,
+      borderRadius: borderRadius ?? this.borderRadius,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (other.runtimeType != runtimeType) return false;
+    return other is TicketShapeBorder &&
+        other.side == side &&
+        other.notchRadius == notchRadius &&
+        other.notchPosition == notchPosition &&
+        other.borderRadius == borderRadius;
+  }
+
+  @override
+  int get hashCode => Object.hash(side, notchRadius, notchPosition, borderRadius);
 }
 
 /* -------------------------------------------------------------------------- */
