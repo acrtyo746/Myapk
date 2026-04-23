@@ -503,7 +503,7 @@ class BookingTicketCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double notchPosition = 135.0;
+    const double notchPosition = 140.0;
     const double notchRadius = 15.0;
 
     final shape = TicketShapeBorder(
@@ -1128,7 +1128,7 @@ class TicketDetailsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double notchPosition = 423.0;
+    const double notchPosition = 435.0;
     const double notchRadius = 20.0;
 
     final shape = TicketShapeBorder(
