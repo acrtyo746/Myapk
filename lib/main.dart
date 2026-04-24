@@ -341,9 +341,9 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
         bottomNavigationBar: Container(
           height: 74 + MediaQuery.of(context).padding.bottom,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: const Color(0xFFE3F5FF),
             borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
-            border: Border.all(color: const Color(0xFFE0E0E0)),
+            border: Border.all(color: const Color(0xFFE0E0E0).withOpacity(0.5)),
           ),
           child: Padding(
             padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
@@ -503,7 +503,7 @@ class BookingTicketCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double notchPosition = 140.0;
+    const double notchPosition = 135.0;
     const double notchRadius = 15.0;
 
     final shape = TicketShapeBorder(
@@ -766,7 +766,7 @@ class _BottomTab extends StatelessWidget {
                 asset,
                 width: 22,
                 height: 22,
-                color: color,
+                color: selected ? null : color,
               ),
               const SizedBox(height: 2),
               Text(
@@ -1128,13 +1128,13 @@ class TicketDetailsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double notchPosition = 435.0;
+    const double notchPosition = 425.0;
     const double notchRadius = 20.0;
 
     final shape = TicketShapeBorder(
       notchRadius: notchRadius,
       notchPosition: notchPosition,
-      borderRadius: 18,
+      borderRadius: 20,
     );
 
     return Container(
