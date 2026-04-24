@@ -343,7 +343,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
           decoration: BoxDecoration(
             color: const Color(0xFFE3F5FF),
             borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
-            border: Border.all(color: const Color(0xFFE0E0E0).withOpacity(0.5)),
+            border: Border.all(color: const Color(0xFFE0E0E0)),
           ),
           child: Padding(
             padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
@@ -503,14 +503,14 @@ class BookingTicketCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double notchPosition = 135.0;
-    const double notchRadius = 15.0;
+    const double notchPosition = 115.0;
+    const double notchRadius = 16.0;
 
     final shape = TicketShapeBorder(
-      side: const BorderSide(color: Color(0xFFE3A655), width: 1.6),
+      side: const BorderSide(color: Color(0xFFE3A655), width: 1.2),
       notchRadius: notchRadius,
       notchPosition: notchPosition,
-      borderRadius: 14,
+      borderRadius: 16,
     );
 
     return Container(
@@ -523,22 +523,22 @@ class BookingTicketCard extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 8),
               child: Column(
                 children: [
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4.5),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
                         decoration: BoxDecoration(
                           color: const Color(0xFFF2E7F5),
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(6),
                         ),
                         child: const Text(
                           'Unreserved',
                           style: TextStyle(
                             color: Color(0xFFAC48BD),
-                            fontSize: 12,
+                            fontSize: 11,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -548,7 +548,7 @@ class BookingTicketCard extends StatelessWidget {
                         'UTS: ',
                         style: TextStyle(
                           color: AppColors.mutedText,
-                          fontSize: 13,
+                          fontSize: 12,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -556,14 +556,14 @@ class BookingTicketCard extends StatelessWidget {
                         item.utsNumber,
                         style: const TextStyle(
                           color: AppColors.textBlack,
-                          fontSize: 13,
+                          fontSize: 12,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 0.5,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   const Row(
                     children: [
                       Expanded(
@@ -571,7 +571,7 @@ class BookingTicketCard extends StatelessWidget {
                           'Ticket Type',
                           style: TextStyle(
                             color: Color(0xFFBCBCBC),
-                            fontSize: 12,
+                            fontSize: 11.5,
                           ),
                         ),
                       ),
@@ -581,13 +581,13 @@ class BookingTicketCard extends StatelessWidget {
                           textAlign: TextAlign.right,
                           style: TextStyle(
                             color: Color(0xFFBCBCBC),
-                            fontSize: 12,
+                            fontSize: 11.5,
                           ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 2),
                   Row(
                     children: [
                       const Expanded(
@@ -595,7 +595,7 @@ class BookingTicketCard extends StatelessWidget {
                           'MONTHLY',
                           style: TextStyle(
                             color: AppColors.titleBlack,
-                            fontSize: 14.5,
+                            fontSize: 13.5,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
@@ -606,14 +606,14 @@ class BookingTicketCard extends StatelessWidget {
                           textAlign: TextAlign.right,
                           style: const TextStyle(
                             color: AppColors.titleBlack,
-                            fontSize: 14.5,
+                            fontSize: 13.5,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   Row(
                     children: [
                       Expanded(
@@ -621,7 +621,7 @@ class BookingTicketCard extends StatelessWidget {
                           item.fromStation,
                           style: const TextStyle(
                             color: AppColors.titleBlack,
-                            fontSize: 14.5,
+                            fontSize: 13.5,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
@@ -630,7 +630,7 @@ class BookingTicketCard extends StatelessWidget {
                         '— ${item.distance} —',
                         style: const TextStyle(
                           color: Color(0xFFBCBCBC),
-                          fontSize: 11,
+                          fontSize: 10.5,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -640,7 +640,7 @@ class BookingTicketCard extends StatelessWidget {
                           textAlign: TextAlign.right,
                           style: const TextStyle(
                             color: AppColors.titleBlack,
-                            fontSize: 14.5,
+                            fontSize: 13.5,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
@@ -651,7 +651,7 @@ class BookingTicketCard extends StatelessWidget {
               ),
             ),
             const SizedBox(
-              height: 32,
+              height: 28,
               child: Stack(
                 clipBehavior: Clip.none,
                 alignment: Alignment.center,
@@ -668,7 +668,7 @@ class BookingTicketCard extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 52,
+              height: 48,
               child: Row(
                 children: [
                   Expanded(
@@ -680,7 +680,7 @@ class BookingTicketCard extends StatelessWidget {
                           style: TextStyle(
                             color: AppColors.blue,
                             fontWeight: FontWeight.w700,
-                            fontSize: 16,
+                            fontSize: 15.5,
                           ),
                         ),
                       ),
@@ -844,8 +844,8 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.transparent,
-        systemNavigationBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: AppColors.blue,
+        systemNavigationBarIconBrightness: Brightness.light,
         statusBarIconBrightness: Brightness.light,
         statusBarColor: Colors.transparent,
       ),
@@ -854,7 +854,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
         bottomNavigationBar: Container(
           height: MediaQuery.of(context).padding.bottom,
           width: double.infinity,
-          color: Colors.white,
+          color: AppColors.blue,
         ),
         body: Column(
           children: [
@@ -936,18 +936,30 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                         ),
                       ],
                     ),
-                    child: const Text(
-                      'Thank You Ajay Amirka Chauhan, Happy Journey !',
-                      style: TextStyle(
+                    child: Text.rich(
+                      TextSpan(
+                        text: 'Thank You ',
+                        style: const TextStyle(fontWeight: FontWeight.w300),
+                        children: [
+                          TextSpan(
+                            text: 'Ajay Amirka Chauhan',
+                            style: const TextStyle(fontWeight: FontWeight.w300),
+                          ),
+                          const TextSpan(
+                            text: ', Happy Journey !',
+                            style: TextStyle(fontWeight: FontWeight.w300),
+                          ),
+                        ],
+                      ),
+                      style: const TextStyle(
                         color: AppColors.darkGrey,
                         fontSize: 15.5,
-                        fontWeight: FontWeight.w300,
                       ),
                     ),
                   ),
                   const SizedBox(height: 17),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: TicketDetailsCard(
                       item: widget.item,
                       expired: expired,
@@ -1128,13 +1140,13 @@ class TicketDetailsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double notchPosition = 425.0;
-    const double notchRadius = 20.0;
+    const double notchPosition = 438.0;
+    const double notchRadius = 22;
 
     final shape = TicketShapeBorder(
       notchRadius: notchRadius,
       notchPosition: notchPosition,
-      borderRadius: 20,
+      borderRadius: 22,
     );
 
     return Container(
@@ -1187,15 +1199,15 @@ class TicketDetailsCard extends StatelessWidget {
                       Text(
                         item.utsNumber,
                         style: const TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w700,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
                           color: AppColors.textBlack,
                           letterSpacing: 0.5,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -1203,8 +1215,9 @@ class TicketDetailsCard extends StatelessWidget {
                         child: Text(
                           item.fromStation,
                           style: const TextStyle(
-                            fontSize: 16.5,
+                            fontSize: 19,
                             fontWeight: FontWeight.w800,
+                            letterSpacing: 0.2,
                           ),
                         ),
                       ),
@@ -1224,14 +1237,15 @@ class TicketDetailsCard extends StatelessWidget {
                           item.toStation,
                           textAlign: TextAlign.right,
                           style: const TextStyle(
-                            fontSize: 16.5,
+                            fontSize: 19,
                             fontWeight: FontWeight.w800,
+                            letterSpacing: 0.2,
                           ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -1251,7 +1265,7 @@ class TicketDetailsCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   const Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -1271,18 +1285,18 @@ class TicketDetailsCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   Text(
                     item.ticketCategory,
                     style: const TextStyle(
-                      fontSize: 14.8,
+                      fontSize: 14,
                       color: AppColors.textBlack,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 12),
                   const SizedBox(
-                    height: 35,
+                    height: 32,
                     child: Stack(
                       clipBehavior: Clip.none,
                       alignment: Alignment.center,
@@ -1390,7 +1404,7 @@ class _TicketTopPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 210,
+      height: 230,
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
@@ -1499,7 +1513,7 @@ class _TicketTopPreview extends StatelessWidget {
                     expired ? 'EXPIRED' : formattedTime,
                     style: TextStyle(
                       color: expired ? Colors.white : AppColors.timerRed,
-                      fontSize: expired ? 28 : 42,
+                      fontSize: expired ? 30 : 46,
                       fontWeight: FontWeight.w900,
                       letterSpacing: 1.2,
                     ),
@@ -1509,7 +1523,7 @@ class _TicketTopPreview extends StatelessWidget {
                     'Ticket Booking Date & Time',
                     style: TextStyle(
                       color: AppColors.lightText,
-                      fontSize: 15,
+                      fontSize: 14.5,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -1518,7 +1532,7 @@ class _TicketTopPreview extends StatelessWidget {
                     item.bookedOn,
                     style: const TextStyle(
                       color: AppColors.ticketYellow,
-                      fontSize: 20,
+                      fontSize: 22,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
@@ -1575,7 +1589,7 @@ class _VerticalRectDashLine extends StatelessWidget {
               width: dashWidth,
               height: dashHeight,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.45),
+                color: Colors.white.withValues(alpha: 0.6),
                 borderRadius: BorderRadius.circular(0.5),
               ),
             ),
@@ -1668,7 +1682,7 @@ class _DetailPair extends StatelessWidget {
           value,
           textAlign: alignEnd ? TextAlign.right : TextAlign.left,
           style: const TextStyle(
-            fontSize: 14.8,
+            fontSize: 15.5,
             fontWeight: FontWeight.w700,
             color: AppColors.textBlack,
             height: 1.2,
@@ -1708,7 +1722,7 @@ class _PersonDetail extends StatelessWidget {
           value,
           textAlign: alignEnd ? TextAlign.right : TextAlign.left,
           style: const TextStyle(
-            fontSize: 16.2,
+            fontSize: 16.5,
             fontWeight: FontWeight.w700,
             color: AppColors.titleBlack,
             height: 1.2,
