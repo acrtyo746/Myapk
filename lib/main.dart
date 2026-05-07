@@ -596,7 +596,7 @@ class BookingTicketCard extends StatelessWidget {
                     children: [
                       const Expanded(
                         child: Text(
-                          'MONTHLY',
+                          'QUARTERLY',
                           style: TextStyle(
                             color: AppColors.titleBlack,
                             fontSize: 13.5,
@@ -804,7 +804,7 @@ class BookingDetailsScreen extends StatefulWidget {
 
 class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
   Timer? _timer;
-  int _remainingSeconds = 300; // 05:00
+  int _remainingSeconds = 299; // 04:59
 
   @override
   void initState() {
@@ -845,7 +845,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final expired = _remainingSeconds == 0;
-    final progress = expired ? 1.0 : (300 - _remainingSeconds) / 300.0;
+    final progress = expired ? 1.0 : (299 - _remainingSeconds) / 299.0;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
