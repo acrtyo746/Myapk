@@ -1197,7 +1197,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                                                 elevation: 0,
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
-                                                      BorderRadius.circular(24),
+                                                      BorderRadius.circular(30),
                                                 ),
                                               ),
                                               onPressed: () =>
