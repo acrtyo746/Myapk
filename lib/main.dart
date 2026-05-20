@@ -96,6 +96,8 @@ class BookingItem {
   final String ticketTypeLabel;
   final String ticketCategory;
   final String bookedOn;
+  final String validFrom;
+  final String validTill;
   final bool showPnr;
 
   const BookingItem({
@@ -110,8 +112,44 @@ class BookingItem {
     required this.ticketTypeLabel,
     required this.ticketCategory,
     required this.bookedOn,
+    required this.validFrom,
+    required this.validTill,
     required this.showPnr,
   });
+
+  BookingItem copyWith({
+    String? tag,
+    Color? tagBg,
+    Color? tagText,
+    String? fromStation,
+    String? toStation,
+    String? viaStation,
+    String? distance,
+    String? utsNumber,
+    String? ticketTypeLabel,
+    String? ticketCategory,
+    String? bookedOn,
+    String? validFrom,
+    String? validTill,
+    bool? showPnr,
+  }) {
+    return BookingItem(
+      tag: tag ?? this.tag,
+      tagBg: tagBg ?? this.tagBg,
+      tagText: tagText ?? this.tagText,
+      fromStation: fromStation ?? this.fromStation,
+      toStation: toStation ?? this.toStation,
+      viaStation: viaStation ?? this.viaStation,
+      distance: distance ?? this.distance,
+      utsNumber: utsNumber ?? this.utsNumber,
+      ticketTypeLabel: ticketTypeLabel ?? this.ticketTypeLabel,
+      ticketCategory: ticketCategory ?? this.ticketCategory,
+      bookedOn: bookedOn ?? this.bookedOn,
+      validFrom: validFrom ?? this.validFrom,
+      validTill: validTill ?? this.validTill,
+      showPnr: showPnr ?? this.showPnr,
+    );
+  }
 }
 
 const reservedBooking = BookingItem(
@@ -120,12 +158,14 @@ const reservedBooking = BookingItem(
   tagText: AppColors.softPurpleChipText,
   fromStation: 'MANKHURD',
   toStation: 'BYCULLA',
-  viaStation: 'KURLA',
+  viaStation: '1RT>>CLA-DR',
   distance: '18 km',
   utsNumber: '95XWEBR09F',
   ticketTypeLabel: 'Season Ticket',
   ticketCategory: 'QUARTERLY | FIRST | ₹1550.00', //570 for 1 month
   bookedOn: '04 May 2026, 10:00',
+  validFrom: '04/05/2026',
+  validTill: '03/08/2026',
   showPnr: false,
 );
 
@@ -141,6 +181,8 @@ const unreservedBooking = BookingItem(
   ticketTypeLabel: 'Season Ticket',
   ticketCategory: 'QUARTERLY | FIRST | ₹1795.00', //660
   bookedOn: '04 May 2026, 10:30',
+  validFrom: '04/05/2026',
+  validTill: '03/08/2026',
   showPnr: false,
 );
 
@@ -804,11 +846,13 @@ class BookingDetailsScreen extends StatefulWidget {
 
 class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
   Timer? _timer;
-  int _remainingSeconds = 299; // 04:59
+  int _remainingSeconds = 300; // 04:59
+  late BookingItem _item;
 
   @override
   void initState() {
     super.initState();
+    _item = widget.item;
     _startTimer();
   }
 
@@ -840,6 +884,96 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
   void dispose() {
     _timer?.cancel();
     super.dispose();
+  }
+
+  void _showEditDialog() {
+    final fromController = TextEditingController(text: _item.fromStation);
+    final toController = TextEditingController(text: _item.toStation);
+    final viaController = TextEditingController(text: _item.viaStation);
+    final distanceController = TextEditingController(text: _item.distance);
+    final utsController = TextEditingController(text: _item.utsNumber);
+    final typeController = TextEditingController(text: _item.ticketTypeLabel);
+    final categoryController =
+        TextEditingController(text: _item.ticketCategory);
+    final dateController = TextEditingController(text: _item.bookedOn);
+    final validFromController = TextEditingController(text: _item.validFrom);
+    final validTillController = TextEditingController(text: _item.validTill);
+    final tagController = TextEditingController(text: _item.tag);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Edit Ticket Details'),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildEditField(fromController, 'From Station'),
+                _buildEditField(toController, 'To Station'),
+                _buildEditField(viaController, 'Via Station'),
+                _buildEditField(distanceController, 'Distance'),
+                _buildEditField(utsController, 'UTS Number'),
+                _buildEditField(typeController, 'Ticket Type'),
+                _buildEditField(categoryController, 'Ticket Category'),
+                _buildEditField(dateController, 'Booked On'),
+                _buildEditField(validFromController, 'Valid From'),
+                _buildEditField(validTillController, 'Valid Till'),
+                _buildEditField(tagController, 'Tag (e.g. Unreserved)'),
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.blue,
+              foregroundColor: Colors.white,
+            ),
+            onPressed: () {
+              setState(() {
+                _item = _item.copyWith(
+                  fromStation: fromController.text,
+                  toStation: toController.text,
+                  viaStation: viaController.text,
+                  distance: distanceController.text,
+                  utsNumber: utsController.text,
+                  ticketTypeLabel: typeController.text,
+                  ticketCategory: categoryController.text,
+                  bookedOn: dateController.text,
+                  validFrom: validFromController.text,
+                  validTill: validTillController.text,
+                  tag: tagController.text,
+                );
+              });
+              Navigator.pop(context);
+            },
+            child: const Text('Save Changes'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEditField(TextEditingController controller, String label) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          border: const OutlineInputBorder(),
+          isDense: true,
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        ),
+      ),
+    );
   }
 
   @override
@@ -879,28 +1013,31 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                     onTap: () => Navigator.pop(context),
                   ),
                   const SizedBox(width: 12),
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Booking Details',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 22,
-                            fontWeight: FontWeight.w600,
+                  Expanded(
+                    child: GestureDetector(
+                      onLongPress: () => _showEditDialog(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Booking Details',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 2),
-                        Text(
-                          'Mobile: 8452856283',
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400,
+                          const SizedBox(height: 2),
+                          Text(
+                            'Mobile: 8452856283',
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   InkWell(
@@ -968,7 +1105,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: TicketDetailsCard(
-                        item: widget.item,
+                        item: _item,
                         expired: expired,
                         formattedTime: formattedTime,
                         progress: progress,
@@ -1013,7 +1150,74 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                                   borderRadius: BorderRadius.circular(14),
                                 ),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => Dialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(28),
+                                    ),
+                                    backgroundColor: Colors.white,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 24, vertical: 32),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.all(12),
+                                            decoration: const BoxDecoration(
+                                              color: Color(0xFFFDE8E9),
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: const Icon(
+                                              Icons.warning_rounded,
+                                              color: Color(0xFFE54D60),
+                                              size: 48,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 24),
+                                          const Text(
+                                            'No internet connection detected.\nPlease check your connection and\ntry again.',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              color: Color(0xFF444444),
+                                              fontWeight: FontWeight.w500,
+                                              height: 1.3,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 32),
+                                          SizedBox(
+                                            width: 160,
+                                            height: 48,
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: const Color(0xFF506DF2),
+                                                elevation: 0,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(24),
+                                                ),
+                                              ),
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                              child: const Text(
+                                                'OK',
+                                                style: TextStyle(
+                                                  fontSize: 17,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
                               child: const Text(
                                 'Upgrade to Superfast',
                                 style: TextStyle(
@@ -1276,20 +1480,20 @@ class TicketDetailsCard extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 10),
-                  const Row(
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                         child: _DetailPair(
                           label: 'Valid From',
-                          value: '04/05/2026',
+                          value: item.validFrom,
                           alignEnd: false,
                         ),
                       ),
                       Expanded(
                         child: _DetailPair(
                           label: '*Valid Till',
-                          value: '03/08/2026',
+                          value: item.validTill,
                           alignEnd: true,
                         ),
                       ),
@@ -1519,14 +1723,65 @@ class _TicketTopPreview extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    expired ? 'EXPIRED' : formattedTime,
-                    style: TextStyle(
-                      color: expired ? Colors.white : AppColors.timerRed,
-                      fontSize: expired ? 30 : 46,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 1.2,
-                    ),
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 500),
+                    child: expired
+                        ? Text(
+                            'EXPIRED',
+                            key: const ValueKey<String>('EXPIRED'),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 30,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 1.2,
+                            ),
+                          )
+                        : Row(
+                            key: const ValueKey<String>('TIMER_ROW'),
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '${formattedTime.split(':')[0]}:',
+                                style: const TextStyle(
+                                  color: AppColors.timerRed,
+                                  fontSize: 46,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 1.2,
+                                ),
+                              ),
+                              AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 500),
+                                transitionBuilder:
+                                    (Widget child, Animation<double> animation) {
+                                  final isEntering = child.key ==
+                                      ValueKey<String>(formattedTime.split(':')[1]);
+                                  return ClipRect(
+                                    child: SlideTransition(
+                                      position: animation.drive(
+                                        Tween<Offset>(
+                                          begin: isEntering
+                                              ? const Offset(0.0, -1.0)
+                                              : const Offset(0.0, 1.0),
+                                          end: Offset.zero,
+                                        ),
+                                      ),
+                                      child: child,
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  formattedTime.split(':')[1],
+                                  key: ValueKey<String>(formattedTime.split(':')[1]),
+                                  style: const TextStyle(
+                                    color: AppColors.timerRed,
+                                    fontSize: 46,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: 1.2,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                   ),
                   const SizedBox(height: 10),
                   const Text(
