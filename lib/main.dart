@@ -1593,7 +1593,7 @@ class TicketDetailsCard extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: DashedLine(
                           color: Color(0xFFD9D9D9),
-                          dashWidth: 3,
+                          dashWidth: 0.5,
                           spacing: 3,
                         ),
                       ),
