@@ -1587,7 +1587,7 @@ class TicketDetailsCard extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: 48,
+                    height: 65,
                     child: Center(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
