@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ui';
 // import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -864,7 +866,60 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
   void initState() {
     super.initState();
     _item = widget.item;
+    _restoreItem();
     _startTimer();
+  }
+
+  String get _storageKey => 'edited_booking_${widget.item.utsNumber}';
+
+  Future<void> _restoreItem() async {
+    final preferences = await SharedPreferences.getInstance();
+    final savedItem = preferences.getString(_storageKey);
+    if (savedItem == null || !mounted) return;
+
+    try {
+      final decoded = jsonDecode(savedItem);
+      if (decoded is! Map<String, dynamic>) return;
+      setState(() {
+        _item = widget.item.copyWith(
+          tag: decoded['tag'] as String?,
+          fromStation: decoded['fromStation'] as String?,
+          toStation: decoded['toStation'] as String?,
+          viaStation: decoded['viaStation'] as String?,
+          distance: decoded['distance'] as String?,
+          utsNumber: decoded['utsNumber'] as String?,
+          ticketTypeLabel: decoded['ticketTypeLabel'] as String?,
+          ticketCategory: decoded['ticketCategory'] as String?,
+          bookedOn: decoded['bookedOn'] as String?,
+          ticketBookingDateTime: decoded['ticketBookingDateTime'] as String?,
+          validFrom: decoded['validFrom'] as String?,
+          validTill: decoded['validTill'] as String?,
+        );
+      });
+    } on FormatException {
+      await preferences.remove(_storageKey);
+    }
+  }
+
+  Future<void> _saveItem(BookingItem item) async {
+    final preferences = await SharedPreferences.getInstance();
+    await preferences.setString(
+      _storageKey,
+      jsonEncode({
+        'tag': item.tag,
+        'fromStation': item.fromStation,
+        'toStation': item.toStation,
+        'viaStation': item.viaStation,
+        'distance': item.distance,
+        'utsNumber': item.utsNumber,
+        'ticketTypeLabel': item.ticketTypeLabel,
+        'ticketCategory': item.ticketCategory,
+        'bookedOn': item.bookedOn,
+        'ticketBookingDateTime': item.ticketBookingDateTime,
+        'validFrom': item.validFrom,
+        'validTill': item.validTill,
+      }),
+    );
   }
 
   void _startTimer() {
@@ -954,24 +1009,25 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
               backgroundColor: AppColors.blue,
               foregroundColor: Colors.white,
             ),
-            onPressed: () {
-              setState(() {
-                _item = _item.copyWith(
-                  fromStation: fromController.text,
-                  toStation: toController.text,
-                  viaStation: viaController.text,
-                  distance: distanceController.text,
-                  utsNumber: utsController.text,
-                  ticketTypeLabel: typeController.text,
-                  ticketCategory: categoryController.text,
-                  bookedOn: dateController.text,
-                  ticketBookingDateTime: ticketBookingDateTimeController.text,
-                  validFrom: validFromController.text,
-                  validTill: validTillController.text,
-                  tag: tagController.text,
-                );
-              });
-              Navigator.pop(context);
+            onPressed: () async {
+              final updatedItem = _item.copyWith(
+                fromStation: fromController.text,
+                toStation: toController.text,
+                viaStation: viaController.text,
+                distance: distanceController.text,
+                utsNumber: utsController.text,
+                ticketTypeLabel: typeController.text,
+                ticketCategory: categoryController.text,
+                bookedOn: dateController.text,
+                ticketBookingDateTime: ticketBookingDateTimeController.text,
+                validFrom: validFromController.text,
+                validTill: validTillController.text,
+                tag: tagController.text,
+              );
+              await _saveItem(updatedItem);
+              if (!mounted) return;
+              setState(() => _item = updatedItem);
+              if (context.mounted) Navigator.pop(context);
             },
             child: const Text('Save Changes'),
           ),
@@ -1408,6 +1464,21 @@ class _TicketInfoRow extends StatelessWidget {
   }
 }
 
+class _TicketNotch extends StatelessWidget {
+  final Color color;
+
+  const _TicketNotch({required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 24,
+      height: 24,
+      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+    );
+  }
+}
+
 class TicketDetailsCard extends StatelessWidget {
   final BookingItem item;
   final bool expired;
@@ -1424,21 +1495,12 @@ class TicketDetailsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double notchPosition = 620.0;
-    const double notchRadius = 12;
-
-    final shape = TicketShapeBorder(
-      notchRadius: notchRadius,
-      notchPosition: notchPosition,
-      borderRadius: 22,
-    );
-
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 2),
-      decoration: ShapeDecoration(
-        color: const Color(0xFFFFFDFD),
-        shape: shape,
-        shadows: [
+      decoration: BoxDecoration(
+        color: const Color(0xFFF9FAFC),
+        borderRadius: BorderRadius.circular(22),
+        boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: .08),
             blurRadius: 18,
@@ -1446,8 +1508,8 @@ class TicketDetailsCard extends StatelessWidget {
           ),
         ],
       ),
-      child: ClipPath(
-        clipper: ShapeBorderClipper(shape: shape),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(22),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -1465,7 +1527,7 @@ class TicketDetailsCard extends StatelessWidget {
                 ),
               ),
             Container(
-              color: Colors.white,
+              color: const Color(0xFFF9FAFC),
               padding: const EdgeInsets.fromLTRB(14, 12, 14, 18),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1559,7 +1621,7 @@ class TicketDetailsCard extends StatelessWidget {
                       vertical: 10,
                     ),
                     decoration: BoxDecoration(
-                      border: Border.all(color: const Color(0xFFC9D9EF)),
+                      border: Border.all(color: const Color(0xFFB8CDE8)),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -1587,16 +1649,35 @@ class TicketDetailsCard extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: 65,
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: DashedLine(
-                          color: Color(0xFFD9D9D9),
-                          dashWidth: 0.5,
-                          spacing: 3,
+                    height: 52,
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Positioned.fill(
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                              ),
+                              child: DashedLine(
+                                color: const Color(0xFFD9D9D9),
+                                dashWidth: 1,
+                                spacing: 3,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        Positioned(
+                          left: -26,
+                          top: 14,
+                          child: _TicketNotch(color: AppColors.lightGrey),
+                        ),
+                        Positioned(
+                          right: -26,
+                          top: 14,
+                          child: _TicketNotch(color: AppColors.lightGrey),
+                        ),
+                      ],
                     ),
                   ),
                   const Row(
