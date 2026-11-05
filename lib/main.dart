@@ -1222,7 +1222,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                                 backgroundColor: AppColors.blue,
                                 elevation: 0,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(14),
+                                  borderRadius: BorderRadius.circular(25),
                                 ),
                               ),
                               onPressed: () {
@@ -1276,7 +1276,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                                                 elevation: 0,
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
-                                                      BorderRadius.circular(30),
+                                                      BorderRadius.circular(35),
                                                 ),
                                               ),
                                               onPressed: () =>
@@ -1523,11 +1523,11 @@ class TicketDetailsCard extends StatelessWidget {
                 value: progress,
                 backgroundColor: Colors.grey.shade300,
                 valueColor: const AlwaysStoppedAnimation<Color>(
-                  Color.fromRGBO(255, 59, 31, 1),
+                  Color.fromARGB(255, 72, 213, 249),
                 ),
               ),
             Container(
-              color: const Color(0xFFF9FAFC),
+              color: Colors.white,
               padding: const EdgeInsets.fromLTRB(14, 12, 14, 18),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1578,51 +1578,54 @@ class TicketDetailsCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 10),
                   _TicketInfoRow(
                     leftLabel: 'Source',
                     leftValue: item.fromStation,
                     rightLabel: 'Destination',
                     rightValue: item.toStation,
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   _TicketInfoRow(
                     leftLabel: 'Distance',
                     leftValue: item.distance,
                     rightLabel: 'Booked on',
                     rightValue: item.bookedOn.replaceAll(',', ''),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   _TicketInfoRow(
                     leftLabel: 'Ticket Type',
                     leftValue: _ticketCategoryPart(item, 0),
                     rightLabel: 'Train Types',
                     rightValue: 'ORDINARY',
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   _TicketInfoRow(
                     leftLabel: 'Class',
                     leftValue: _ticketCategoryPart(item, 1),
                     rightLabel: 'Fare',
                     rightValue: _ticketCategoryPart(item, 2),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   _TicketInfoRow(
                     leftLabel: 'Valid From',
                     leftValue: item.validFrom,
                     rightLabel: 'Valid Upto',
                     rightValue: item.validTill,
                   ),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 12),
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 10,
+                      horizontal: 10,
+                      vertical: 8,
                     ),
                     decoration: BoxDecoration(
-                      border: Border.all(color: const Color(0xFFB8CDE8)),
-                      borderRadius: BorderRadius.circular(12),
+                      color: const Color.fromARGB(255, 250, 250, 250),
+                      border: Border.all(
+                        color: const Color.fromARGB(240, 240, 240, 240),
+                      ),
+                      borderRadius: BorderRadius.circular(9),
                     ),
                     child: Row(
                       children: [
@@ -1630,17 +1633,17 @@ class TicketDetailsCard extends StatelessWidget {
                           quarterTurns: 1,
                           child: Icon(
                             Icons.alt_route_rounded,
-                            size: 23,
+                            size: 14,
                             color: AppColors.darkGrey,
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: 6),
                         Expanded(
                           child: Text(
                             'Via: ${item.viaStation}',
                             style: const TextStyle(
-                              color: Color(0xFF314A68),
-                              fontSize: 14,
+                              color: Color.fromARGB(255, 5, 5, 5),
+                              fontSize: 10,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -1649,7 +1652,7 @@ class TicketDetailsCard extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: 52,
+                    height: 50,
                     child: Stack(
                       clipBehavior: Clip.none,
                       children: [
@@ -1657,10 +1660,10 @@ class TicketDetailsCard extends StatelessWidget {
                           child: Center(
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
+                                horizontal: 1,
                               ),
                               child: DashedLine(
-                                color: const Color(0xFFD9D9D9),
+                                color: const Color.fromARGB(255, 72, 213, 249),
                                 dashWidth: 1,
                                 spacing: 3,
                               ),
@@ -1698,7 +1701,7 @@ class TicketDetailsCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   const Row(
                     children: [
                       Expanded(
@@ -1734,21 +1737,14 @@ class TicketDetailsCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    '*Valid for start of journey within 1 hour or until departure of the first train.',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: AppColors.mutedText,
-                      fontStyle: FontStyle.italic,
-                    ),
-                  ),
                 ],
               ),
             ),
             Container(
               height: 12,
-              decoration: const BoxDecoration(color: AppColors.ticketPink),
+              decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 72, 213, 249),
+              ),
             ),
           ],
         ),
@@ -1804,7 +1800,7 @@ class _TicketTopPreview extends StatelessWidget {
               child: Container(
                 height: 12,
                 decoration: const BoxDecoration(
-                  color: AppColors.ticketPink,
+                  color: Color.fromARGB(255, 72, 213, 249),
                   borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
                 ),
               ),
@@ -1860,124 +1856,138 @@ class _TicketTopPreview extends StatelessWidget {
               right: 24,
               top: 18,
               bottom: 10,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'Dynamic preview will close in',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w700,
+              child: Transform.scale(
+                scaleX: 1.08,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Dynamic preview will close in',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 500),
-                    child: expired
-                        ? Text(
-                            'EXPIRED',
-                            key: const ValueKey<String>('EXPIRED'),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 30,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: 1.2,
-                            ),
-                          )
-                        : Row(
-                            key: const ValueKey<String>('TIMER_ROW'),
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '${formattedTime.split(':')[0]}:',
-                                style: const TextStyle(
-                                  color: AppColors.timerRed,
-                                  fontSize: 46,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: 1.2,
-                                ),
+                    const SizedBox(height: 8),
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 500),
+                      child: expired
+                          ? Text(
+                              'EXPIRED',
+                              key: const ValueKey<String>('EXPIRED'),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 30,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 1.2,
                               ),
-                              AnimatedSwitcher(
-                                duration: const Duration(milliseconds: 500),
-                                transitionBuilder:
-                                    (
-                                      Widget child,
-                                      Animation<double> animation,
-                                    ) {
-                                      final isEntering =
-                                          child.key ==
-                                          ValueKey<String>(
-                                            formattedTime.split(':')[1],
-                                          );
-                                      return ClipRect(
-                                        child: SlideTransition(
-                                          position: animation.drive(
-                                            Tween<Offset>(
-                                              begin: isEntering
-                                                  ? const Offset(0.0, -1.0)
-                                                  : const Offset(0.0, 1.0),
-                                              end: Offset.zero,
-                                            ),
-                                          ),
-                                          child: child,
-                                        ),
-                                      );
-                                    },
-                                child: Text(
-                                  formattedTime.split(':')[1],
-                                  key: ValueKey<String>(
-                                    formattedTime.split(':')[1],
-                                  ),
+                            )
+                          : Row(
+                              key: const ValueKey<String>('TIMER_ROW'),
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '${formattedTime.split(':')[0]}:',
                                   style: const TextStyle(
                                     color: AppColors.timerRed,
+                                    fontFamily: 'Roboto',
                                     fontSize: 46,
                                     fontWeight: FontWeight.w900,
                                     letterSpacing: 1.2,
+                                    fontFeatures: [
+                                      FontFeature.tabularFigures(),
+                                    ],
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    'Ticket Booking Date & Time',
-                    style: TextStyle(
-                      color: AppColors.lightText,
-                      fontSize: 14.5,
-                      fontWeight: FontWeight.w600,
+                                AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 500),
+                                  transitionBuilder:
+                                      (
+                                        Widget child,
+                                        Animation<double> animation,
+                                      ) {
+                                        final isEntering =
+                                            child.key ==
+                                            ValueKey<String>(
+                                              formattedTime.split(':')[1],
+                                            );
+                                        return ClipRect(
+                                          child: SlideTransition(
+                                            position: animation.drive(
+                                              Tween<Offset>(
+                                                begin: isEntering
+                                                    ? const Offset(0.0, -1.0)
+                                                    : const Offset(0.0, 1.0),
+                                                end: Offset.zero,
+                                              ),
+                                            ),
+                                            child: child,
+                                          ),
+                                        );
+                                      },
+                                  child: Text(
+                                    formattedTime.split(':')[1],
+                                    key: ValueKey<String>(
+                                      formattedTime.split(':')[1],
+                                    ),
+                                    style: const TextStyle(
+                                      color: AppColors.timerRed,
+                                      fontFamily: 'Roboto',
+                                      fontSize: 46,
+                                      fontWeight: FontWeight.w900,
+                                      letterSpacing: 1.2,
+                                      fontFeatures: [
+                                        FontFeature.tabularFigures(),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                     ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    item.ticketBookingDateTime,
-                    style: const TextStyle(
-                      color: AppColors.ticketYellow,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w900,
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Ticket Booking Date & Time',
+                      style: TextStyle(
+                        color: AppColors.lightText,
+                        fontSize: 14.5,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 6),
-                  const Text(
-                    'R25585',
-                    style: TextStyle(
-                      color: AppColors.lightText,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
+                    const SizedBox(height: 8),
+                    Transform.scale(
+                      scaleX: 1.28,
+                      child: Text(
+                        item.ticketBookingDateTime,
+                        style: const TextStyle(
+                          color: AppColors.ticketYellow,
+                          fontSize: 27,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    'Ticket is Non-Transferable',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
+                    const SizedBox(height: 6),
+                    const Text(
+                      'R25585',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 4),
+                    const Text(
+                      'Ticket is Non-Transferable',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
