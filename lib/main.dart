@@ -1643,7 +1643,7 @@ class TicketDetailsCard extends StatelessWidget {
                             'Via: ${item.viaStation}',
                             style: const TextStyle(
                               color: Color.fromARGB(255, 5, 5, 5),
-                              fontSize: 10,
+                              fontSize: 11,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -1784,8 +1784,8 @@ class _TicketTopPreview extends StatelessWidget {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Colors.black.withValues(alpha: .26),
-                      Colors.black.withValues(alpha: .14),
+                      Colors.black.withValues(alpha: .40),
+                      Colors.black.withValues(alpha: .28),
                     ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
@@ -1857,7 +1857,7 @@ class _TicketTopPreview extends StatelessWidget {
               top: 18,
               bottom: 10,
               child: Transform.scale(
-                scaleX: 1.08,
+                scaleX: 1.10,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -1866,7 +1866,7 @@ class _TicketTopPreview extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 22,
+                        fontSize: 23,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -1956,14 +1956,14 @@ class _TicketTopPreview extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 4),
                     Transform.scale(
-                      scaleX: 1.28,
+                      scaleX: 1.07,
                       child: Text(
                         item.ticketBookingDateTime,
                         style: const TextStyle(
                           color: AppColors.ticketYellow,
-                          fontSize: 27,
+                          fontSize: 31,
                           fontWeight: FontWeight.w900,
                         ),
                       ),
