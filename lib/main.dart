@@ -89,6 +89,7 @@ class AppColors {
 /* -------------------------------------------------------------------------- */
 
 class BookingItem {
+  final String storageId;
   final String tag;
   final Color tagBg;
   final Color tagText;
@@ -106,6 +107,7 @@ class BookingItem {
   final bool showPnr;
 
   const BookingItem({
+    required this.storageId,
     required this.tag,
     required this.tagBg,
     required this.tagText,
@@ -141,6 +143,7 @@ class BookingItem {
     bool? showPnr,
   }) {
     return BookingItem(
+      storageId: storageId,
       tag: tag ?? this.tag,
       tagBg: tagBg ?? this.tagBg,
       tagText: tagText ?? this.tagText,
@@ -162,6 +165,7 @@ class BookingItem {
 }
 
 const reservedBooking = BookingItem(
+  storageId: '95XWEBR09F',
   tag: 'Unreserved',
   tagBg: AppColors.softPurpleChip,
   tagText: AppColors.softPurpleChipText,
@@ -180,6 +184,7 @@ const reservedBooking = BookingItem(
 );
 
 const unreservedBooking = BookingItem(
+  storageId: 'G019EC0022',
   tag: 'Unreserved',
   tagBg: AppColors.softPurpleChip,
   tagText: AppColors.softPurpleChipText,
@@ -196,6 +201,35 @@ const unreservedBooking = BookingItem(
   validTill: '03/08/2026',
   showPnr: false,
 );
+
+String _bookingStorageKey(BookingItem item) =>
+    'edited_booking_${item.storageId}';
+
+String _bookingCardDate(BookingItem item) => item.bookedOn
+    .split(',')
+    .first
+    .replaceFirst(RegExp(r'\s+\d{4}$'), '')
+    .trim();
+
+BookingItem _bookingItemFromJson(BookingItem item, String savedItem) {
+  final decoded = jsonDecode(savedItem);
+  if (decoded is! Map<String, dynamic>) return item;
+
+  return item.copyWith(
+    tag: decoded['tag'] as String?,
+    fromStation: decoded['fromStation'] as String?,
+    toStation: decoded['toStation'] as String?,
+    viaStation: decoded['viaStation'] as String?,
+    distance: decoded['distance'] as String?,
+    utsNumber: decoded['utsNumber'] as String?,
+    ticketTypeLabel: decoded['ticketTypeLabel'] as String?,
+    ticketCategory: decoded['ticketCategory'] as String?,
+    bookedOn: decoded['bookedOn'] as String?,
+    ticketBookingDateTime: decoded['ticketBookingDateTime'] as String?,
+    validFrom: decoded['validFrom'] as String?,
+    validTill: decoded['validTill'] as String?,
+  );
+}
 
 /* -------------------------------------------------------------------------- */
 /*                                SPLASH SCREEN                               */
@@ -379,6 +413,45 @@ class MyBookingsScreen extends StatefulWidget {
 
 class _MyBookingsScreenState extends State<MyBookingsScreen> {
   int currentTab = 0;
+  List<BookingItem> _bookings = [reservedBooking, unreservedBooking];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBookings();
+  }
+
+  Future<void> _loadBookings() async {
+    final preferences = await SharedPreferences.getInstance();
+    final bookings = <BookingItem>[];
+
+    for (final item in [reservedBooking, unreservedBooking]) {
+      final storageKey = _bookingStorageKey(item);
+      final savedItem = preferences.getString(storageKey);
+      if (savedItem == null) {
+        bookings.add(item);
+        continue;
+      }
+
+      try {
+        bookings.add(_bookingItemFromJson(item, savedItem));
+      } on FormatException {
+        await preferences.remove(storageKey);
+        bookings.add(item);
+      }
+    }
+
+    if (!mounted) return;
+    setState(() => _bookings = bookings);
+  }
+
+  Future<void> _openBookingDetails(BookingItem item) async {
+    await Navigator.push<void>(
+      context,
+      MaterialPageRoute(builder: (_) => BookingDetailsScreen(item: item)),
+    );
+    await _loadBookings();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -492,29 +565,13 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                     ),
                     const SizedBox(height: 12),
                     BookingTicketCard(
-                      item: reservedBooking,
-                      onViewDetails: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                BookingDetailsScreen(item: reservedBooking),
-                          ),
-                        );
-                      },
+                      item: _bookings[0],
+                      onViewDetails: () => _openBookingDetails(_bookings[0]),
                     ),
                     const SizedBox(height: 14),
                     BookingTicketCard(
-                      item: unreservedBooking,
-                      onViewDetails: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                BookingDetailsScreen(item: unreservedBooking),
-                          ),
-                        );
-                      },
+                      item: _bookings[1],
+                      onViewDetails: () => _openBookingDetails(_bookings[1]),
                     ),
                   ],
                 ),
@@ -659,7 +716,7 @@ class BookingTicketCard extends StatelessWidget {
                       ),
                       Expanded(
                         child: Text(
-                          item.bookedOn.split(',')[0],
+                          _bookingCardDate(item),
                           textAlign: TextAlign.right,
                           style: const TextStyle(
                             color: AppColors.titleBlack,
@@ -870,7 +927,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
     _startTimer();
   }
 
-  String get _storageKey => 'edited_booking_${widget.item.utsNumber}';
+  String get _storageKey => _bookingStorageKey(widget.item);
 
   Future<void> _restoreItem() async {
     final preferences = await SharedPreferences.getInstance();
@@ -878,23 +935,8 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
     if (savedItem == null || !mounted) return;
 
     try {
-      final decoded = jsonDecode(savedItem);
-      if (decoded is! Map<String, dynamic>) return;
       setState(() {
-        _item = widget.item.copyWith(
-          tag: decoded['tag'] as String?,
-          fromStation: decoded['fromStation'] as String?,
-          toStation: decoded['toStation'] as String?,
-          viaStation: decoded['viaStation'] as String?,
-          distance: decoded['distance'] as String?,
-          utsNumber: decoded['utsNumber'] as String?,
-          ticketTypeLabel: decoded['ticketTypeLabel'] as String?,
-          ticketCategory: decoded['ticketCategory'] as String?,
-          bookedOn: decoded['bookedOn'] as String?,
-          ticketBookingDateTime: decoded['ticketBookingDateTime'] as String?,
-          validFrom: decoded['validFrom'] as String?,
-          validTill: decoded['validTill'] as String?,
-        );
+        _item = _bookingItemFromJson(widget.item, savedItem);
       });
     } on FormatException {
       await preferences.remove(_storageKey);
