@@ -379,6 +379,52 @@ class MyBookingsScreen extends StatefulWidget {
 
 class _MyBookingsScreenState extends State<MyBookingsScreen> {
   int currentTab = 0;
+  List<BookingItem> _bookings = [reservedBooking, unreservedBooking];
+
+  @override
+  void initState() {
+    super.initState();
+    _restoreBookings();
+  }
+
+  Future<void> _restoreBookings() async {
+    final preferences = await SharedPreferences.getInstance();
+    final bookings = [reservedBooking, unreservedBooking];
+
+    for (var index = 0; index < bookings.length; index++) {
+      final item = bookings[index];
+      final storageKey = 'edited_booking_${item.utsNumber}';
+      final savedItem = preferences.getString(storageKey);
+      if (savedItem == null) continue;
+
+      try {
+        final decoded = jsonDecode(savedItem);
+        if (decoded is! Map<String, dynamic>) continue;
+        bookings[index] = item.copyWith(
+          fromStation: decoded['fromStation'] as String?,
+          toStation: decoded['toStation'] as String?,
+          ticketTypeLabel: decoded['ticketTypeLabel'] as String?,
+          bookedOn: decoded['bookedOn'] as String?,
+        );
+      } on FormatException {
+        await preferences.remove(storageKey);
+      }
+    }
+
+    if (!mounted) return;
+    setState(() => _bookings = bookings);
+  }
+
+  void _updateBooking(int index, BookingItem item) {
+    setState(() {
+      _bookings[index] = _bookings[index].copyWith(
+        fromStation: item.fromStation,
+        toStation: item.toStation,
+        ticketTypeLabel: item.ticketTypeLabel,
+        bookedOn: item.bookedOn,
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -492,26 +538,32 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                     ),
                     const SizedBox(height: 12),
                     BookingTicketCard(
-                      item: reservedBooking,
+                      item: _bookings[0],
                       onViewDetails: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) =>
-                                BookingDetailsScreen(item: reservedBooking),
+                            builder: (_) => BookingDetailsScreen(
+                              item: _bookings[0],
+                              storageId: reservedBooking.utsNumber,
+                              onItemChanged: (item) => _updateBooking(0, item),
+                            ),
                           ),
                         );
                       },
                     ),
                     const SizedBox(height: 14),
                     BookingTicketCard(
-                      item: unreservedBooking,
+                      item: _bookings[1],
                       onViewDetails: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) =>
-                                BookingDetailsScreen(item: unreservedBooking),
+                            builder: (_) => BookingDetailsScreen(
+                              item: _bookings[1],
+                              storageId: unreservedBooking.utsNumber,
+                              onItemChanged: (item) => _updateBooking(1, item),
+                            ),
                           ),
                         );
                       },
@@ -647,10 +699,10 @@ class BookingTicketCard extends StatelessWidget {
                   const SizedBox(height: 2),
                   Row(
                     children: [
-                      const Expanded(
+                      Expanded(
                         child: Text(
-                          'QUARTERLY',
-                          style: TextStyle(
+                          item.ticketTypeLabel,
+                          style: const TextStyle(
                             color: AppColors.titleBlack,
                             fontSize: 13.5,
                             fontWeight: FontWeight.w800,
@@ -851,7 +903,15 @@ class _BottomTab extends StatelessWidget {
 
 class BookingDetailsScreen extends StatefulWidget {
   final BookingItem item;
-  const BookingDetailsScreen({super.key, required this.item});
+  final String storageId;
+  final ValueChanged<BookingItem> onItemChanged;
+
+  const BookingDetailsScreen({
+    super.key,
+    required this.item,
+    required this.storageId,
+    required this.onItemChanged,
+  });
 
   @override
   State<BookingDetailsScreen> createState() => _BookingDetailsScreenState();
@@ -870,7 +930,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
     _startTimer();
   }
 
-  String get _storageKey => 'edited_booking_${widget.item.utsNumber}';
+  String get _storageKey => 'edited_booking_${widget.storageId}';
 
   Future<void> _restoreItem() async {
     final preferences = await SharedPreferences.getInstance();
@@ -1026,6 +1086,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
               );
               await _saveItem(updatedItem);
               if (!mounted) return;
+              widget.onItemChanged(updatedItem);
               setState(() => _item = updatedItem);
               if (context.mounted) Navigator.pop(context);
             },
