@@ -406,6 +406,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
           ticketTypeLabel: decoded['ticketTypeLabel'] as String?,
           ticketCategory: decoded['ticketCategory'] as String?,
           bookedOn: decoded['bookedOn'] as String?,
+          ticketBookingDateTime: decoded['ticketBookingDateTime'] as String?,
         );
       } on FormatException {
         await preferences.remove(storageKey);
@@ -424,6 +425,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
         ticketTypeLabel: item.ticketTypeLabel,
         ticketCategory: item.ticketCategory,
         bookedOn: item.bookedOn,
+        ticketBookingDateTime: item.ticketBookingDateTime,
       );
     });
   }
@@ -713,7 +715,7 @@ class BookingTicketCard extends StatelessWidget {
                       ),
                       Expanded(
                         child: Text(
-                          item.bookedOn.split(',')[0],
+                          _bookingDateLabel(item.ticketBookingDateTime),
                           textAlign: TextAlign.right,
                           style: const TextStyle(
                             color: AppColors.titleBlack,
@@ -1049,11 +1051,11 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                 _buildEditField(utsController, 'UTS Number'),
                 _buildEditField(typeController, 'Ticket Type'),
                 _buildEditField(categoryController, 'Ticket Category'),
-                _buildEditField(dateController, 'Booked On'),
                 _buildEditField(
                   ticketBookingDateTimeController,
                   'Ticket Booking Date & Time',
                 ),
+                _buildEditField(dateController, 'Booked On'),
                 _buildEditField(validFromController, 'Valid From'),
                 _buildEditField(validTillController, 'Valid Till'),
                 _buildEditField(tagController, 'Tag (e.g. Unreserved)'),
@@ -1488,6 +1490,15 @@ String _ticketCategoryPart(BookingItem item, int index) {
       .map((part) => part.trim())
       .toList();
   return index < parts.length ? parts[index] : '';
+}
+
+String _bookingDateLabel(String dateTime) {
+  final date = dateTime.split(',').first.trim();
+  final parts = date.split(RegExp(r'\s+'));
+  if (parts.length >= 3 && parts.last.length == 4) {
+    parts[parts.length - 1] = parts.last.substring(2);
+  }
+  return 'Mon, ${parts.join(' ')}';
 }
 
 class _TicketInfoRow extends StatelessWidget {
