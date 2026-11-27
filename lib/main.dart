@@ -404,6 +404,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
           fromStation: decoded['fromStation'] as String?,
           toStation: decoded['toStation'] as String?,
           ticketTypeLabel: decoded['ticketTypeLabel'] as String?,
+          ticketCategory: decoded['ticketCategory'] as String?,
           bookedOn: decoded['bookedOn'] as String?,
         );
       } on FormatException {
@@ -421,6 +422,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
         fromStation: item.fromStation,
         toStation: item.toStation,
         ticketTypeLabel: item.ticketTypeLabel,
+        ticketCategory: item.ticketCategory,
         bookedOn: item.bookedOn,
       );
     });
@@ -640,13 +642,13 @@ class BookingTicketCard extends StatelessWidget {
                           vertical: 3.5,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF2E7F5),
+                          color: item.tagBg,
                           borderRadius: BorderRadius.circular(6),
                         ),
-                        child: const Text(
-                          'Unreserved',
+                        child: Text(
+                          item.tag,
                           style: TextStyle(
-                            color: Color(0xFFAC48BD),
+                            color: item.tagText,
                             fontSize: 11,
                             fontWeight: FontWeight.w700,
                           ),
@@ -701,7 +703,7 @@ class BookingTicketCard extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          item.ticketTypeLabel,
+                          _ticketCategoryPart(item, 0),
                           style: const TextStyle(
                             color: AppColors.titleBlack,
                             fontSize: 13.5,
