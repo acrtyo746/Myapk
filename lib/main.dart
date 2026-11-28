@@ -15,6 +15,7 @@ void main() {
       systemNavigationBarColor: Colors.transparent,
       systemNavigationBarContrastEnforced: false,
       statusBarIconBrightness: Brightness.light,
+      statusBarBrightness: Brightness.dark,
       systemNavigationBarDividerColor: Colors.transparent,
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
@@ -103,6 +104,10 @@ class BookingItem {
   final String ticketBookingDateTime;
   final String validFrom;
   final String validTill;
+  final String passengerName;
+  final String passengerAge;
+  final String idType;
+  final String idNumber;
   final bool showPnr;
 
   const BookingItem({
@@ -120,6 +125,10 @@ class BookingItem {
     required this.ticketBookingDateTime,
     required this.validFrom,
     required this.validTill,
+    required this.passengerName,
+    required this.passengerAge,
+    required this.idType,
+    required this.idNumber,
     required this.showPnr,
   });
 
@@ -138,6 +147,10 @@ class BookingItem {
     String? ticketBookingDateTime,
     String? validFrom,
     String? validTill,
+    String? passengerName,
+    String? passengerAge,
+    String? idType,
+    String? idNumber,
     bool? showPnr,
   }) {
     return BookingItem(
@@ -156,6 +169,10 @@ class BookingItem {
           ticketBookingDateTime ?? this.ticketBookingDateTime,
       validFrom: validFrom ?? this.validFrom,
       validTill: validTill ?? this.validTill,
+      passengerName: passengerName ?? this.passengerName,
+      passengerAge: passengerAge ?? this.passengerAge,
+      idType: idType ?? this.idType,
+      idNumber: idNumber ?? this.idNumber,
       showPnr: showPnr ?? this.showPnr,
     );
   }
@@ -176,24 +193,10 @@ const reservedBooking = BookingItem(
   ticketBookingDateTime: '04 May 2026, 10:00',
   validFrom: '04/05/2026',
   validTill: '03/08/2026',
-  showPnr: false,
-);
-
-const unreservedBooking = BookingItem(
-  tag: 'Unreserved',
-  tagBg: AppColors.softPurpleChip,
-  tagText: AppColors.softPurpleChipText,
-  fromStation: 'DADAR',
-  toStation: 'BORIVALI',
-  viaStation: '---',
-  distance: '24 km',
-  utsNumber: 'G019EC0022',
-  ticketTypeLabel: 'Season Ticket',
-  ticketCategory: 'QUARTERLY | FIRST | ₹1795.00', //660
-  bookedOn: '04 May 2026, 10:30',
-  ticketBookingDateTime: '04 May 2026, 10:30',
-  validFrom: '04/05/2026',
-  validTill: '03/08/2026',
+  passengerName: 'Ajay Amirka Chauhan',
+  passengerAge: '20 years',
+  idType: 'PAN Card',
+  idNumber: 'DFCPC7842Q',
   showPnr: false,
 );
 
@@ -379,7 +382,7 @@ class MyBookingsScreen extends StatefulWidget {
 
 class _MyBookingsScreenState extends State<MyBookingsScreen> {
   int currentTab = 0;
-  List<BookingItem> _bookings = [reservedBooking, unreservedBooking];
+  List<BookingItem> _bookings = [reservedBooking];
 
   @override
   void initState() {
@@ -389,7 +392,8 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
 
   Future<void> _restoreBookings() async {
     final preferences = await SharedPreferences.getInstance();
-    final bookings = [reservedBooking, unreservedBooking];
+    await preferences.remove('edited_booking_G019EC0022');
+    final bookings = [reservedBooking];
 
     for (var index = 0; index < bookings.length; index++) {
       final item = bookings[index];
@@ -437,6 +441,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
         systemNavigationBarColor: Colors.transparent,
         systemNavigationBarIconBrightness: Brightness.dark,
         statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
         statusBarColor: Colors.transparent,
       ),
       child: Scaffold(
@@ -524,7 +529,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                       children: [
                         const Spacer(flex: 2),
                         const Text(
-                          'Upcoming (2)',
+                          'Upcoming (1)',
                           style: TextStyle(
                             color: AppColors.orange,
                             fontSize: 15.5,
@@ -551,22 +556,6 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                               item: _bookings[0],
                               storageId: reservedBooking.utsNumber,
                               onItemChanged: (item) => _updateBooking(0, item),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 14),
-                    BookingTicketCard(
-                      item: _bookings[1],
-                      onViewDetails: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => BookingDetailsScreen(
-                              item: _bookings[1],
-                              storageId: unreservedBooking.utsNumber,
-                              onItemChanged: (item) => _updateBooking(1, item),
                             ),
                           ),
                         );
@@ -665,13 +654,16 @@ class BookingTicketCard extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      Text(
-                        item.utsNumber,
-                        style: const TextStyle(
-                          color: AppColors.textBlack,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 0.5,
+                      Flexible(
+                        child: Text(
+                          item.utsNumber,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: AppColors.textBlack,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.5,
+                          ),
                         ),
                       ),
                     ],
@@ -706,6 +698,8 @@ class BookingTicketCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           _ticketCategoryPart(item, 0),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             color: AppColors.titleBlack,
                             fontSize: 13.5,
@@ -717,6 +711,8 @@ class BookingTicketCard extends StatelessWidget {
                         child: Text(
                           _bookingDateLabel(item.ticketBookingDateTime),
                           textAlign: TextAlign.right,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             color: AppColors.titleBlack,
                             fontSize: 13.5,
@@ -732,6 +728,8 @@ class BookingTicketCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           item.fromStation,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             color: AppColors.titleBlack,
                             fontSize: 13.5,
@@ -751,6 +749,8 @@ class BookingTicketCard extends StatelessWidget {
                         child: Text(
                           item.toStation,
                           textAlign: TextAlign.right,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             color: AppColors.titleBlack,
                             fontSize: 13.5,
@@ -958,6 +958,10 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
           ticketBookingDateTime: decoded['ticketBookingDateTime'] as String?,
           validFrom: decoded['validFrom'] as String?,
           validTill: decoded['validTill'] as String?,
+          passengerName: decoded['passengerName'] as String?,
+          passengerAge: decoded['passengerAge'] as String?,
+          idType: decoded['idType'] as String?,
+          idNumber: decoded['idNumber'] as String?,
         );
       });
     } on FormatException {
@@ -982,6 +986,10 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
         'ticketBookingDateTime': item.ticketBookingDateTime,
         'validFrom': item.validFrom,
         'validTill': item.validTill,
+        'passengerName': item.passengerName,
+        'passengerAge': item.passengerAge,
+        'idType': item.idType,
+        'idNumber': item.idNumber,
       }),
     );
   }
@@ -1033,6 +1041,14 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
     final validFromController = TextEditingController(text: _item.validFrom);
     final validTillController = TextEditingController(text: _item.validTill);
     final tagController = TextEditingController(text: _item.tag);
+    final passengerNameController = TextEditingController(
+      text: _item.passengerName,
+    );
+    final passengerAgeController = TextEditingController(
+      text: _item.passengerAge,
+    );
+    final idTypeController = TextEditingController(text: _item.idType);
+    final idNumberController = TextEditingController(text: _item.idNumber);
 
     showDialog(
       context: context,
@@ -1059,6 +1075,10 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                 _buildEditField(validFromController, 'Valid From'),
                 _buildEditField(validTillController, 'Valid Till'),
                 _buildEditField(tagController, 'Tag (e.g. Unreserved)'),
+                _buildEditField(passengerNameController, 'Name'),
+                _buildEditField(passengerAgeController, 'Age'),
+                _buildEditField(idTypeController, 'ID Type'),
+                _buildEditField(idNumberController, 'ID Number'),
               ],
             ),
           ),
@@ -1087,6 +1107,10 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                 validFrom: validFromController.text,
                 validTill: validTillController.text,
                 tag: tagController.text,
+                passengerName: passengerNameController.text,
+                passengerAge: passengerAgeController.text,
+                idType: idTypeController.text,
+                idNumber: idNumberController.text,
               );
               await _saveItem(updatedItem);
               if (!mounted) return;
@@ -1129,6 +1153,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
         systemNavigationBarColor: AppColors.blue,
         systemNavigationBarIconBrightness: Brightness.light,
         statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
         statusBarColor: Colors.transparent,
       ),
       child: Scaffold(
@@ -1757,31 +1782,31 @@ class TicketDetailsCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const Row(
+                  Row(
                     children: [
                       Expanded(
                         child: _PersonDetail(
                           label: 'Name',
-                          value: 'Ajay Amirka Chauhan',
+                          value: item.passengerName,
                           alignEnd: false,
                         ),
                       ),
                       Expanded(
                         child: _PersonDetail(
                           label: 'Age',
-                          value: '20 years',
+                          value: item.passengerAge,
                           alignEnd: true,
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 10),
-                  const Row(
+                  Row(
                     children: [
                       Expanded(
                         child: _PersonDetail(
                           label: 'ID Type',
-                          value: 'PAN Card',
+                          value: item.idType,
                           alignEnd: false,
                         ),
                       ),
@@ -1798,8 +1823,8 @@ class TicketDetailsCard extends StatelessWidget {
                             ),
                             SizedBox(height: 6),
                             Text(
-                              'DFCPC7842Q',
-                              style: TextStyle(
+                              item.idNumber,
+                              style: const TextStyle(
                                 fontSize: 14.8,
                                 fontWeight: FontWeight.w700,
                                 color: AppColors.textBlack,
@@ -1930,12 +1955,12 @@ class _TicketTopPreview extends StatelessWidget {
               right: 24,
               top: 18,
               bottom: 10,
-              child: Transform.scale(
-                scaleX: 1.10,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
                       'Dynamic preview will close in',
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -1944,23 +1969,29 @@ class _TicketTopPreview extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 500),
-                      child: expired
-                          ? Text(
+                  ),
+                  const SizedBox(height: 8),
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 500),
+                    child: expired
+                        ? const FittedBox(
+                            key: ValueKey<String>('EXPIRED'),
+                            fit: BoxFit.scaleDown,
+                            child: Text(
                               'EXPIRED',
-                              key: const ValueKey<String>('EXPIRED'),
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 30,
                                 fontWeight: FontWeight.w900,
                                 letterSpacing: 1.2,
                               ),
-                            )
-                          : Row(
-                              key: const ValueKey<String>('TIMER_ROW'),
-                              mainAxisAlignment: MainAxisAlignment.center,
+                            ),
+                          )
+                        : FittedBox(
+                            key: const ValueKey<String>('TIMER_ROW'),
+                            fit: BoxFit.scaleDown,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
                                   '${formattedTime.split(':')[0]}:',
@@ -2020,9 +2051,12 @@ class _TicketTopPreview extends StatelessWidget {
                                 ),
                               ],
                             ),
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
+                          ),
+                  ),
+                  const SizedBox(height: 10),
+                  const FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
                       'Ticket Booking Date & Time',
                       style: TextStyle(
                         color: AppColors.lightText,
@@ -2030,38 +2064,38 @@ class _TicketTopPreview extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Transform.scale(
-                      scaleX: 1.07,
-                      child: Text(
-                        item.ticketBookingDateTime,
-                        style: const TextStyle(
-                          color: AppColors.ticketYellow,
-                          fontSize: 31,
-                          fontWeight: FontWeight.w900,
-                        ),
+                  ),
+                  const SizedBox(height: 4),
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      item.ticketBookingDateTime,
+                      style: const TextStyle(
+                        color: AppColors.ticketYellow,
+                        fontSize: 31,
+                        fontWeight: FontWeight.w900,
                       ),
                     ),
-                    const SizedBox(height: 6),
-                    const Text(
-                      'R25585',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
+                  ),
+                  const SizedBox(height: 6),
+                  const Text(
+                    'R25585',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
                     ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      'Ticket is Non-Transferable',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
+                  ),
+                  const SizedBox(height: 4),
+                  const Text(
+                    'Ticket is Non-Transferable',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],
